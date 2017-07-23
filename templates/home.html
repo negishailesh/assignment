@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div style="padding-left: 86px;">
+<label for="inputsm">Enter the City Name</label>
+<input type = "text" class="form-control" id = "city" required>&nbsp;&nbsp;<br>
+<input type = "button" class= "btn-primary" id = "submit" name = "submit" value="Submit"/>
+</div>
+<hr>
+<div id="display" style="padding-left: 86px;">
+<textarea id = "text" class="form-group" rows="4" cols="50" style="display: none;">
+</textarea>
+<input type = "submit" id = "yes" class="btn-info" name = "submit" value = "Save Details"  style="display: none;"/>
+<input type = "button"  class = "btn-danger" id = "no" name = "submit" value = "Nope"  style="display: none;"/>
+</div>
+<hr>
+<div style="padding-left: 86px;">
+<input type = "button" class="btn-success" id = "user_data" name = "submit" value="Get My Data" />
+<br><br>
+</div>
+<div class="container" id = "my_data" style="padding-left: 86px;">
+
+</div>
+
+</body>
+
+<script>
+$('#submit').click(function(){
+	var city = $('#city').val();
+	console.log(city);
+	if (city == ""){
+		alert("City Name can't be blank");
+		return False;
+		}
+	$.ajax({
+		type: "GET",
+		url: "/signup/get_city_detail/",
+		data: {"city":city},
+		success: function (resp){ 
+				if (!resp.success){
+					alert("CITY NOT FOUND");
+					return False;
+							}
+				else{
+					$("#text").show();	
+					$("#yes").show();	
+					$("#no").show();	
+					$("#text").val(resp['row']);	
+					console.log(resp);
+					}
+				}
+	});
+
+});
+</script>
+<script>
+$('#yes').click(function(){
+	var data = $("#text").val();
+	console.log(data);
+	$.ajax({
+		type: "GET",
+		url: "/signup/city_api/",
+		data: {'data':data},
+		success: function(resp){
+			console.log("details saved");
+			console.log(resp.row);
+			alert("Details have been Successfully Saved");
+			$("#text").val(' ');
+			$("#city").val(' ');
+			$("#city").focus();
+					}	
+
+});
+});
+</script>
+<script>
+$('#no').click(function(){
+	console.log("Content now hidden");
+	$("#display").hide();
+	location.reload();
+});
+</script>
+<script>
+$('#user_data').click(function(){
+	console.log("press me");
+	$.ajax({
+		type: "GET",
+		url: "/signup/user_selected_data/",
+		success:function(resp){
+			console.log("get_user_data");
+                        $("#my_data").html(resp.row);
+				}
+
+});
+});
+</script>
+{% endblock %}
+

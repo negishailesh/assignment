@@ -1,0 +1,35 @@
+{% if status == 1 %}
+
+{{location}}___{{state}}___{{lat}}___{{long}}
+
+{% elif status == 2 %}
+ <tr>
+        <td>{{location}}</td>
+        <td>{{state}}</td>
+        <td>{{lat}}</td>
+        <td>{{long}}</td>
+ </tr>
+
+{% elif status == 3  %}
+
+<table class="table">
+        <th>City</th>
+        <th>State</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+      </tr>
+    </thead>
+    <tbody>
+ {%for i in city %}
+      <tr>
+        <td>{{i.location}}</td>
+        <td>{{i.state}}</td>
+        <td>{{i.latitude}}</td>
+        <td>{{i.longitude}}</td>
+      </tr>
+ {%endfor%}
+    </tbody>
+  </table>
+
+
+{%endif%}
